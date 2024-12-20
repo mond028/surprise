@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beautiful Surprise</title>
     <style>
+        /* Import fonts */
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;500&display=swap');
 
+        /* Base styles for body */
         body {
             margin: 0;
             padding: 0;
@@ -22,6 +24,7 @@
             overflow: hidden;
         }
 
+        /* Gradient animation */
         @keyframes gradient {
             0%, 100% {
                 background-position: 0% 50%;
@@ -31,11 +34,13 @@
             }
         }
 
+        /* General typography styles */
         h1, p {
             margin: 0;
             font-weight: 500;
         }
 
+        /* Input container styles */
         #input-container {
             margin-bottom: 20px;
             text-align: center;
@@ -51,7 +56,8 @@
             border: 1px solid #ddd;
             border-radius: 15px;
             outline: none;
-            width: 250px;
+            width: 80%;
+            max-width: 300px;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             font-family: 'Dancing Script', cursive;
@@ -75,6 +81,7 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
+        /* Card styles */
         #card {
             text-align: center;
             background: white;
@@ -129,6 +136,7 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
+        /* Confetti animation */
         @keyframes confetti {
             from {
                 transform: translateY(-100%);
@@ -149,6 +157,7 @@
             animation: confetti 3s linear infinite;
         }
 
+        /* Pulse animation */
         @keyframes pulse {
             0%, 100% {
                 transform: scale(1);
@@ -161,11 +170,11 @@
 </head>
 <body>
     <div id="input-container">
-        <input type="text" id="nameInput" placeholder="Enter your name..." />
+        <input type="text" id="nameInput" placeholder="Enter your name..." aria-label="Name Input">
         <button onclick="revealCard()">Surprise!</button>
     </div>
 
-    <div id="card">
+    <div id="card" role="dialog" aria-hidden="true">
         <div id="heart" onclick="heartBeat()">❤️</div>
         <h1 id="message">I Miss You!</h1>
         <p>You make my world brighter every day.</p>
@@ -173,6 +182,17 @@
     </div>
 
     <script>
+        const funnyMessages = [
+            "You're my favorite notification!",
+            "Did you just steal a star from the sky?",
+            "Oops, my heart skipped a beat!",
+            "Are you a magician? Because every time I see you, everyone else disappears.",
+            "If kisses were snowflakes, I'd send you a blizzard.",
+            "You’re the cheese to my macaroni!",
+            "Do you believe in love at first sight—or should I walk by again?",
+            "You're the Wi-Fi to my router!"
+        ];
+
         function revealCard() {
             const nameInput = document.getElementById("nameInput").value.trim();
             const message = document.getElementById("message");
@@ -185,6 +205,7 @@
 
             card.style.opacity = 1;
             card.style.transform = "scale(1)";
+            card.setAttribute("aria-hidden", "false");
 
             for (let i = 0; i < 150; i++) {
                 const confetti = document.createElement("div");
@@ -207,8 +228,15 @@
 
         function heartBeat() {
             const heart = document.getElementById("heart");
+            const message = document.getElementById("message");
+
+            // Set the pulse animation
             heart.style.animation = "pulse 0.5s infinite";
             setTimeout(() => heart.style.animation = "pulse 1s infinite", 1000);
+
+            // Display a random funny message
+            const randomFunnyMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+            message.innerText = randomFunnyMessage;
         }
 
         function resetSurprise() {
@@ -218,6 +246,7 @@
 
             card.style.opacity = 0;
             card.style.transform = "scale(0.5)";
+            card.setAttribute("aria-hidden", "true");
             resetButton.style.display = "none";
             inputContainer.style.display = "flex";
 
